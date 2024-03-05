@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"/>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>Document</title>
+    <style>
+      * {
+        margin: 0px;
+        padding: 0px;
+        box-sizing: border-box;
+      }
+      body{
+        background-color: rgb(0, 0, 0);
+      }
+      #header-img {
+        background-image: url("./images/background-img.jpg");
+        /* width: 100%; */
+        height:100vh;
+        background-repeat: no-repeat;
+        /* background-size: cover; */
+        align-items: center;
+        display: flex;
+        opacity:0.7;
+        justify-content: center;
+        padding: 57px;
+        }
+      .header {
+        width: 100%;
+        height:100%;
+        padding: 40px 20px;
+        border-radius: 10px;
+        padding-right: 30px;
+        background-color: rgba(0, 0, 0, 0.672);
+      }
+      input{
+        text-align: center;
+        height: 40px;
+        width: 100%;
+        border: none;
+        border-radius: 15px;
+        background-color: black;
+        color: white;
+        font-size: 25px;
+        cursor: pointer;
+      }
+      .top2{
+        height: 35px;
+        width: 13%;
+        align-items: center;
+        display: flex;
+        justify-content: center;
+        border-radius: 50px;
+        background-color: rgb(0, 0, 0);
+        cursor: pointer;
+      }
+      .mainpart{
+        padding: 10px;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .tamp{
+        width: 100%;
+        flex-direction: column;
+      }
+      .tam1{
+        width: 100%;
+        font-size: 20px;
+        text-align: center;
+        color: aliceblue;
+      }
+        .tam2{
+        width: 100%;
+        text-align: center;
+        color:white;
+        font-size: 35px;
+       font-family: fangsong;
+      }
+      .last{
+        display: flex;
+        align-items: center;
+        color: white;
+      }
+      .tophead{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: fangsong;
+
+      }
+      .tophead span{
+        font-size: 20px;
+        flex-direction: column;
+        padding: 10px;
+      }
+      .tophead p{
+        margin: 1px;
+        flex-direction: column;
+        padding: 10px;
+      }
+      #humidity{
+        font-size: 19px;
+      }
+      #Windspeed{
+        font-size: 19px;
+      }
+      #City{
+        font-size: 35px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="header-img">
+      <div class="container">
+        <div class="row">
+          <div class="col-sm-4"></div>
+          <div class="col-sm-4">
+            <div class="header">
+              <div class="container tophead">
+                <div class="row">
+                    <div class="col-sm-10 top1">
+                       <input id="input" type="text" placeholder="enter a city">
+                    </div>
+                    <div id="btn" class="col-sm-2 top2">
+                      <i class="fa fa-search" aria-hidden="true" style="color: white; font-size: 20px;"></i>
+                    </div>
+                </div>
+              </div>
+              <div class="container mainpart">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <img src="./images/clear.png" alt="" style="height: 150px;" id="weather">
+                    </div>
+                </div>
+              </div>
+              <div class="container tamp">
+                <div class="row">
+                    <div class="col-sm-6 tam1" id="temp">temperature</div>
+                    <div class="col-sm-6 tam2" id="cityName">City</div>
+                </div>
+              </div><br>
+              <div class="last">
+                <div class="tophead">
+                  <img src="./images/humidity.png" style="height:50px;">
+                  <p><span id="humidity">0%</span><br>Humimdity</p>
+                </div>
+              </div>
+              
+              <div class="last">
+                <div class="tophead">
+                  <img src="./images/wind.png" style="height:60px;">
+                  <p><span id="windSpeed">km/h</span><br>Wind Speed</p>
+                </div>
+              </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-4"></div>
+        </div>
+
+      </div>
+    </div>
+<script>
+
+  let temp = document.getElementById("temp")
+  let humidity = document.getElementById("humidity")
+  let windSpeed =document.getElementById("windSpeed")
+  let cityName = document.getElementById("cityName")
+  let input= document.getElementById("input")
+  let btn= document.getElementById("btn")
+  let url= "https://api.openweathermap.org/data/2.5/forecast?id=524901"
+  let apiKey= "9a37d690e47be961ae5dbaf94cef2159"
+  let city= "jaipur"
+  let statusIcon =document.getElementById("weather")
+  let image= document.getElementById("header-img")
+
+  let getData = async () => {
+   
+    temp.innerHTML= "Loading.."
+    windSpeed.innerHTML= "Loading.."
+    humidity.innerHTML= "Loading.."
+    cityName.innerHTML= "City"
+
+    let response =  await fetch(`${url}&appid=${apiKey}&q=${city}`)
+    // console.log(response);
+    let json = await response.json()
+    console.log(json.list)
+    temp.innerHTML =`${Math.round(json.list[0].main.temp-273.15)}°C`;
+    humidity.innerHTML = `${json.list[0].main.humidity}%`;
+    windSpeed.innerHTML = `${json.list[0].wind.speed} km/h`; 
+    cityName.innerHTML = json.city.name;
+
+  // console.log(json.list);
+    
+   if (json.list[0].weather[0].main == "Clear") {
+    statusIcon.src = "./images/clear.png" 
+   }
+   else if(json.list[0].weather[0].main == "Clouds") {
+    statusIcon.src = "./images/clouds.png" 
+    image.style.backgroundImage = "./images/background-img2.jpg" 
+   }
+   else if (json.list[0].weather[0].main == "Rain") {
+     statusIcon.src = "./images/rain.png"
+   } 
+     else if (json.list[0].weather[0].main == "Drizzle") {
+     statusIcon.src = "./images/drizzle.png"
+   }
+   else if(json.list[0].weather[0].main == "Mist") {
+    statusIcon.src = "./images/mist.png"
+   }
+ else if(json.list[0].weather[0].main == "Snow") {
+    statusIcon.src = "./images/snow.png"
+   }
+  };
+  getData();
+  btn.addEventListener("click",async()=>{
+   city= input.value
+   await getData()
+  })
+  </script>
+  </body>
+</html>
